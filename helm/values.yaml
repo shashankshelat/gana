@@ -1,0 +1,88 @@
+replicaCount:
+  backend: 2
+  frontend: 1
+
+image:
+  backend:
+    repository: gana/backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: gana/frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+
+service:
+  backend:
+    type: ClusterIP
+    port: 8000
+  frontend:
+    type: ClusterIP
+    port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  host: gana.example.com
+  tls: true
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+kafka:
+  enabled: true
+  replicaCount: 3
+  persistence:
+    size: 50Gi
+  config:
+    numPartitions: 6
+    defaultReplicationFactor: 3
+
+redis:
+  enabled: true
+  auth:
+    enabled: true
+
+postgresql:
+  enabled: false  # Set to true to use PostgreSQL instead of SQLite
+  auth:
+    database: ocsf
+    username: ocsf
+
+env:
+  secretKey: ""  # Override in production
+  ocsf_schema_update_interval_hours: "24"
+  max_workers: "4"
+  pipeline_batch_size: "1000"
+
+persistence:
+  data:
+    size: 10Gi
+    storageClass: ""
+
+resources:
+  backend:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+  frontend:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+monitoring:
+  prometheus:
+    enabled: true
+    scrapeInterval: 15s
+  grafana:
+    enabled: true
+    dashboardConfigMap: gana-grafana-dashboard

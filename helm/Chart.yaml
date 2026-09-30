@@ -1,0 +1,12 @@
+apiVersion: v2
+name: gana
+description: GANA — Map. Normalize. Understand. Open-source OCSF log normalization and forwarding platform
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - ocsf
+  - security
+  - siem
+  - log-normalization
+home: https://github.com/your-org/gana
